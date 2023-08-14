@@ -55,10 +55,16 @@ jobs:
           if [ "$RUNNER_OS" == "Windows" ]; then
             npx nx run open-lens:build:app --win nsis msi portable
           elif [ "$RUNNER_OS" == "Linux" ]; then
-            sudo apt update
-            sudo apt install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y
+            npx nx run open-lens:build:app          
+            npm run all:reinstall
+            npx nx reset
           
-            npx nx run open-lens:build:app --x64 --arm64
+            sudo apt update
+            sudo apt install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y          
+            export CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++
+            mkdir -p open-lens/node_modules
+          
+            npx nx run open-lens:build:app --arm64
             find . -name '*pty.node' -print0 | xargs -0 file
           else
             npx nx run open-lens:build:app --x64 --arm64
@@ -88,7 +94,6 @@ jobs:
           else
             for filename in OpenLens*; do certutil -hashfile "${filename}" SHA256 | tee "${filename}.sha256" ; done
           fi
-
         shell: bash
         working-directory: lens/open-lens/dist
 
@@ -97,7 +102,7 @@ jobs:
         with:
           name: OpenLens-${{ matrix.os }}
           retention-days: 5
-          path: lens/open-lens/dist/OpenLens*${{ env.LENS_VERSION }}-${{ env.BUILD_ID }}*.*
+          path: lens/open-lens/dist/OpenLens*${{ env.LENS_VERSION }}-${{ env.BUILD_NUMBER }}*.*
 
       - name: Generate Changelog
         run: curl -s https://api.github.com/repos/lensapp/lens/releases/latest | jq -r 'select(.prerelease == false) | .body[0:]' > ${{ github.workspace }}-CHANGELOG.txt
@@ -106,9 +111,9 @@ jobs:
         uses: softprops/action-gh-release@v0.1.15
         if: github.ref == 'refs/heads/main'
         with:
-          tag_name: v${{ env.LENS_VERSION }}-${{ env.BUILD_ID }}
+          tag_name: v${{ env.LENS_VERSION }}-${{ env.BUILD_NUMBER }}
           body_path: ${{ github.workspace }}-CHANGELOG.txt
-          files: lens/open-lens/dist/OpenLens*${{ env.LENS_VERSION }}-${{ env.BUILD_ID }}*.*
+          files: lens/open-lens/dist/OpenLens*${{ env.LENS_VERSION }}-${{ env.BUILD_NUMBER }}*.*
 
       - name: Latest
         uses: softprops/action-gh-release@v0.1.15
@@ -116,5 +121,5 @@ jobs:
         with:
           tag_name: Latest
           files: |
-            lens/open-lens/dist/OpenLens*${{ env.LENS_VERSION }}-${{ env.BUILD_ID }}*.*
-            #lens/open-lens/dist/lates*.yml
+            lens/open-lens/dist/OpenLens*${{ env.LENS_VERSION }}-${{ env.BUILD_NUMBER }}*.*
+            lens/open-lens/dist/lates*.yml
