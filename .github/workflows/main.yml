@@ -18,8 +18,7 @@ jobs:
     env:
       BUILD_ID: ${{ github.run_number }}
     steps:
-      #- name: Checkout OpenLens
-      - name: Checkout Robing/OpenLens
+      - name: Checkout OpenLens
         uses: actions/checkout@v3
 
       - name: Export version to variable
@@ -30,17 +29,16 @@ jobs:
         with:
           node-version: "16.x"
 
-      - name: Checkout Upstream Robing
+      - name: Checkout Upstream Lens
         uses: actions/checkout@v3
         with:
-          repository: Robing/OpenLens
-          path: Robing
+          repository: lensapp/lens
+          path: lens
           ref: v${{ env.LENS_VERSION }}
           fetch-depth: 1
 
       - name: Patch Upstream Lens
         run: node update.js
-
       - name: Build Lens
         run: |
           npm run all:install
