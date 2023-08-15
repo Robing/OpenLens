@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const packageJsonOpenLens = require('./Robing/package.json');
+const packageJsonOpenLens = require('./OpenLens/package.json');
 
 packageJsonOpenLens.build.publish = [{
     url: "https://github.com/Robing/OpenLens/releases/download/Latest",
