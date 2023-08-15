@@ -18,7 +18,8 @@ jobs:
     env:
       BUILD_ID: ${{ github.run_number }}
     steps:
-      - name: Checkout OpenLens
+      #- name: Checkout OpenLens
+      - name: Checkout Robing/OpenLens
         uses: actions/checkout@v3
 
       - name: Export version to variable
@@ -32,7 +33,7 @@ jobs:
       - name: Checkout Upstream Lens
         uses: actions/checkout@v3
         with:
-          repository: lensapp/lens
+          repository: Robing/OpenLens
           path: lens
           ref: v${{ env.LENS_VERSION }}
           fetch-depth: 1
@@ -121,5 +122,5 @@ jobs:
         with:
           tag_name: Latest
           files: |
-            lens/open-lens/dist/OpenLens*${{ env.LENS_VERSION }}-${{ env.BUILD_NUMBER }}*.*
-            lens/open-lens/dist/lates*.yml
+            Robing/OpenLens/dist/OpenLens*${{ env.LENS_VERSION }}-${{ env.BUILD_NUMBER }}*.*
+            Robing/OpenLens/dist/lates*.yml
