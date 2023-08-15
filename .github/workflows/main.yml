@@ -111,9 +111,9 @@ jobs:
         uses: softprops/action-gh-release@v0.1.15
         if: github.ref == 'refs/heads/main'
         with:
-          tag_name: v${{ env.LENS_VERSION }}-${{ env.BUILD_NUMBER }}
+          tag_name: v0.0.9
           body_path: ${{ github.workspace }}-CHANGELOG.txt
-          files: Robing/OpenLens/dist/OpenLens*${{ env.LENS_VERSION }}-${{ env.BUILD_NUMBER }}*.*
+          files: Robing/OpenLens/dist/OpenLens*v0.0.9*.*
 
       - name: Latest
         uses: softprops/action-gh-release@v0.1.15
@@ -121,5 +121,5 @@ jobs:
         with:
           tag_name: Latest
           files: |
-            lens/open-lens/dist/OpenLens*${{ env.LENS_VERSION }}-${{ env.BUILD_NUMBER }}*.*
+            lens/open-lens/dist/OpenLens*v0.0.9*.*
             lens/open-lens/dist/lates*.yml
