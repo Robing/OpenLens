@@ -26,13 +26,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16.16.0
-      - name: Update Lens
-        run: |
-          git clone https://github.com/lensapp/lens.git
-          cp update.js lens/update.js
-          cd lens
-          git checkout v${{ env.LENS_VERSION }}
-          node update.js
+      - name: Checkout Upstream Lens
+        uses: actions/checkout@v3
+        with:
+          repository: lensapp/lens
+          path: lens
+          ref: v${{ env.LENS_VERSION }}
+          fetch-depth: 1
       - name: Build Lens
         run: |
           mkdir releasefiles
